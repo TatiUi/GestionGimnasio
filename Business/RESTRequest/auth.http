@@ -1,0 +1,19 @@
+@host = http://localhost:9090/api
+
+
+### Iniciar sesión
+POST {{host}}/auth/login
+Content-Type: application/json
+
+{
+    "correo_electronico": "daniel.castro@gmail.com",
+    "password": "Admin1234$"
+}
+
+### Renovar sesión
+POST {{host}}/auth/refresh-session/1
+Content-Type: application/json
+
+{
+    "tkRef": "PEGAR_AQUI_EL_REFRESH_TOKEN"
+}

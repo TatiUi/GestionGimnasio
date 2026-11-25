@@ -1,0 +1,38 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/pagos
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnZXN0aW9uLWdpbW5hc2lvLWJ1c2luZXNzIiwiaWF0IjoxNzk0MTYyMTM5LCJleHAiOjE3OTQxNjU3MzksInN1YiI6MSwiY29ycmVvX2VsZWN0cm9uaWNvIjoiZGFuaWVsLmNhc3Ryb0BnbWFpbC5jb20iLCJyb2xfaWQiOjF9.VYr5VpycQZ6Jd6y2nGY7TvCmP1ZZeSGO2ADgADXS6t4
+
+
+GET {{uri}}
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/filter/0/10
+Authorization: Bearer {{token}}
+###
+
+POST {{uri}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "membresia_id": 2,
+    "monto": 18000,
+    "fecha_pago": "2026-11-08 08:00:00",
+    "metodo_pago": "Efectivo",
+    "estado": "Completado"
+}
+###
+
+PUT {{uri}}/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "estado": "Anulado"
+}
+###
+
+
+DELETE {{uri}}/1
+Authorization: Bearer {{token}}

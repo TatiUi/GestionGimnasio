@@ -1,0 +1,36 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/asistencias
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnZXN0aW9uLWdpbW5hc2lvLWJ1c2luZXNzIiwiaWF0IjoxNzk0MTYyMTM5LCJleHAiOjE3OTQxNjU3MzksInN1YiI6MSwiY29ycmVvX2VsZWN0cm9uaWNvIjoiZGFuaWVsLmNhc3Ryb0BnbWFpbC5jb20iLCJyb2xfaWQiOjF9.VYr5VpycQZ6Jd6y2nGY7TvCmP1ZZeSGO2ADgADXS6t4
+
+
+GET {{uri}}
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/filter/0/10
+Authorization: Bearer {{token}}
+###
+
+POST {{uri}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "inscripcion_id": 1,
+    "clase_id": 2,
+    "fecha_asistencia": "2026-11-10 08:00:00",
+    "estado": "Presente"
+}
+###
+
+PUT {{uri}}/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "estado": "Ausente"
+}
+###
+
+DELETE {{uri}}
+Authorization: Bearer {{token}}

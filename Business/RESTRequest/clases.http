@@ -1,0 +1,40 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/clases
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnZXN0aW9uLWdpbW5hc2lvLWJ1c2luZXNzIiwiaWF0IjoxNzk0MTYyMTM5LCJleHAiOjE3OTQxNjU3MzksInN1YiI6MSwiY29ycmVvX2VsZWN0cm9uaWNvIjoiZGFuaWVsLmNhc3Ryb0BnbWFpbC5jb20iLCJyb2xfaWQiOjF9.VYr5VpycQZ6Jd6y2nGY7TvCmP1ZZeSGO2ADgADXS6t4
+
+
+GET {{uri}}
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/filter/0/10
+Authorization: Bearer {{token}}
+###
+
+POST {{uri}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "entrenador_id": 1,
+    "nombre": "Entrenamiento funcional",
+    "descripcion": "Clase de acondicionamiento fisico",
+    "capacidad": 20,
+    "fecha_hora_inicio": "2026-11-10 08:00:00",
+    "fecha_hora_fin": "2026-11-10 09:00:00",
+    "estado": "Programada"
+}
+###
+
+PUT {{uri}}/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nombre": "Entrenamiento funcional avanzado",
+    "estado": "Finalizada"
+}
+###
+
+DELETE {{uri}}/1
+Authorization: Bearer {{token}}

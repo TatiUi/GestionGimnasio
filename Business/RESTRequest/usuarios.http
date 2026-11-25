@@ -1,0 +1,40 @@
+@host = http://localhost:9090/api
+@uri = {{host}}/usuarios
+@token = eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJpc3MiOiJnZXN0aW9uLWdpbW5hc2lvLWJ1c2luZXNzIiwiaWF0IjoxNzk0MTYyMTM5LCJleHAiOjE3OTQxNjU3MzksInN1YiI6MSwiY29ycmVvX2VsZWN0cm9uaWNvIjoiZGFuaWVsLmNhc3Ryb0BnbWFpbC5jb20iLCJyb2xfaWQiOjF9.VYr5VpycQZ6Jd6y2nGY7TvCmP1ZZeSGO2ADgADXS6t4
+
+GET {{uri}}
+Authorization: Bearer {{token}}
+###
+
+GET {{uri}}/filter/0/10
+Authorization: Bearer {{token}}
+###
+
+POST {{uri}}
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "rol_id": 3,
+    "nombre": "Ana",
+    "apellido": "Lopez",
+    "cedula": "300000002",
+    "correo_electronico": "ana.lopez@gmail.com",
+    "telefono": "8888-0102",
+    "password": "Password1#"
+}
+###
+
+PUT {{uri}}/1
+Authorization: Bearer {{token}}
+Content-Type: application/json
+
+{
+    "nombre": "Daniel",
+    "apellido": "Castro",
+    "telefono": "8888-0101"
+}
+###
+
+DELETE {{uri}}/2
+Authorization: Bearer {{token}}

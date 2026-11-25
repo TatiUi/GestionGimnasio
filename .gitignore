@@ -1,0 +1,8 @@
+.env
+/db_password.txt
+/node_modules/
+/dist/
+*.log
+/mysql/
+/Business/vendor/
+/Data/vendor/
