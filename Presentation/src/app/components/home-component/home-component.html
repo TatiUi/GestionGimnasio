@@ -1,0 +1,241 @@
+<div class="w-full max-w-7xl mx-auto px-4 md:px-10 py-8">
+
+    <!-- Mensaje de bienvenida -->
+    <header class="bg-[#163a63] text-white rounded-2xl
+        p-5 md:p-8 mb-8 shadow-md">
+
+        <div class="flex items-center gap-4 mb-4">
+
+            <mat-icon class="text-3xl! w-9! h-9! shrink-0"
+                aria-hidden="true">
+
+                fitness_center
+
+            </mat-icon>
+
+            <h1 class="text-2xl md:text-3xl font-bold">
+
+                Bienvenido al gimnasio
+
+            </h1>
+
+        </div>
+
+        <p class="text-blue-100 mb-5">
+
+            Gestiona las actividades y servicios desde un solo lugar.
+
+        </p>
+
+        <div class="flex flex-wrap items-center gap-3">
+
+            <span class="bg-white/15 rounded-lg px-4 py-2
+                break-all">
+
+                {{correo}}
+
+            </span>
+
+            <span class="bg-white/15 rounded-lg px-4 py-2">
+
+                {{nombreRol}}
+
+            </span>
+
+        </div>
+
+    </header>
+
+    <!-- Dashboard de métricas -->
+    <section class="mb-10"
+        aria-labelledby="titulo-metricas">
+
+        <!-- Encabezado de métricas -->
+        <div class="mb-6">
+
+            <h2 id="titulo-metricas"
+                class="text-2xl font-bold text-slate-800">
+
+                Resumen general
+
+            </h2>
+
+            <p class="text-slate-600 mt-1">
+
+                Consulta los principales indicadores de tu cuenta.
+
+            </p>
+
+        </div>
+
+        <!-- Tarjetas de métricas -->
+        <div class="grid grid-cols-1 sm:grid-cols-2
+            xl:grid-cols-4 gap-5">
+
+            @for(metrica of metricas; track metrica.label) {
+
+                <mat-card
+                    class="bg-white! rounded-xl! shadow-sm!
+                    border! border-slate-200! p-5">
+
+                    <div class="flex items-start
+                        justify-between gap-3 mb-4">
+
+                        <!-- Nombre de la métrica -->
+                        <h3 class="text-sm font-semibold
+                            text-slate-600">
+
+                            {{metrica.label}}
+
+                        </h3>
+
+                        <!-- Icono de la métrica -->
+                        <div
+                            [class]="metrica.color +
+                            ' w-12 h-12 rounded-xl flex
+                            items-center justify-center shrink-0'">
+
+                            <mat-icon aria-hidden="true">
+
+                                {{metrica.icon}}
+
+                            </mat-icon>
+
+                        </div>
+
+                    </div>
+
+                    <!-- Valor obtenido desde la API -->
+                    <div class="text-4xl font-bold
+                        text-[#163a63] mb-3"
+                        aria-live="polite">
+
+                        {{metrica.valor}}
+
+                    </div>
+
+                    <!-- Descripción -->
+                    <p class="text-sm text-slate-600">
+
+                        {{metrica.descripcion}}
+
+                    </p>
+
+                    @if(metrica.valor === '-') {
+
+                        <p class="text-xs text-slate-600 mt-3">
+
+                            Consultando datos o información
+                            no disponible.
+
+                        </p>
+
+                    }
+
+                </mat-card>
+
+            }
+
+        </div>
+
+    </section>
+
+    <!-- Accesos rápidos -->
+    <section aria-labelledby="titulo-accesos">
+
+        <!-- Encabezado de accesos rápidos -->
+        <div class="mb-6">
+
+            <h2 id="titulo-accesos"
+                class="text-2xl font-bold text-slate-800">
+
+                Accesos rápidos
+
+            </h2>
+
+            <p class="text-slate-600 mt-1">
+
+                Selecciona el módulo al que deseas ingresar.
+
+            </p>
+
+        </div>
+
+        <!-- Tarjetas de acceso rápido -->
+        <div class="grid grid-cols-1 md:grid-cols-2
+            xl:grid-cols-3 gap-6">
+
+            @for(acceso of accesos; track acceso.label) {
+
+                @if(acceso.rol.includes(rol)) {
+
+                    <mat-card
+                        class="bg-white! rounded-xl! p-5 shadow-sm!
+                        hover:shadow-lg! transition-shadow duration-300
+                        min-h-52 flex flex-col">
+
+                        <mat-card-header>
+
+                            <div mat-card-avatar
+                                class="bg-blue-100 rounded-xl
+                                flex items-center justify-center
+                                text-[#163a63]">
+
+                                <mat-icon aria-hidden="true">
+
+                                    {{acceso.icon}}
+
+                                </mat-icon>
+
+                            </div>
+
+                            <mat-card-title
+                                class="text-lg! font-bold!">
+
+                                {{acceso.label}}
+
+                            </mat-card-title>
+
+                        </mat-card-header>
+
+                        <mat-card-content class="mt-5 flex-1">
+
+                            <p class="text-slate-600 text-sm">
+
+                                {{acceso.descripcion}}
+
+                            </p>
+
+                        </mat-card-content>
+
+                        <mat-card-actions class="mt-4">
+
+                            <a mat-button
+                                [routerLink]="acceso.route"
+                                [attr.aria-label]="
+                                    'Ingresar a ' + acceso.label"
+                                class="text-[#163a63]!">
+
+                                Ingresar
+
+                                <mat-icon aria-hidden="true">
+
+                                    arrow_forward
+
+                                </mat-icon>
+
+                            </a>
+
+                        </mat-card-actions>
+
+                    </mat-card>
+
+                }
+
+            }
+
+        </div>
+
+    </section>
+
+</div>

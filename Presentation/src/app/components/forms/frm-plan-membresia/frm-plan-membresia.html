@@ -1,0 +1,149 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmPlan"
+        [formRoot]="frmPlan"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 py-5">
+
+        <!-- Nombre -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Nombre del plan</mat-label>
+
+            <input matInput
+                type="text"
+                placeholder="Nombre del plan"
+                [formField]="frmPlan.nombre">
+
+            @if(frmPlan.nombre().touched() &&
+                frmPlan.nombre().invalid()) {
+
+                @for(error of frmPlan.nombre().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Descripción -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Descripción</mat-label>
+
+            <textarea matInput
+                rows="3"
+                placeholder="Descripción del plan"
+                [formField]="frmPlan.descripcion">
+            </textarea>
+
+            @if(frmPlan.descripcion().touched() &&
+                frmPlan.descripcion().invalid()) {
+
+                @for(error of frmPlan.descripcion().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Precio -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Precio (₡)</mat-label>
+
+            <input matInput
+                type="number"
+                placeholder="Precio del plan"
+                [formField]="frmPlan.precio">
+
+            @if(frmPlan.precio().touched() &&
+                frmPlan.precio().invalid()) {
+
+                @for(error of frmPlan.precio().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Duración -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Duración en días</mat-label>
+
+            <input matInput
+                type="number"
+                placeholder="Cantidad de días"
+                [formField]="frmPlan.duracion_dias">
+
+            @if(frmPlan.duracion_dias().touched() &&
+                frmPlan.duracion_dias().invalid()) {
+
+                @for(error of frmPlan.duracion_dias().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmPlan"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-[#d1d5db]!
+            disabled:text-[#64748b]!"
+            [disabled]="frmPlan().invalid()">
+
+            Guardar
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

@@ -1,0 +1,226 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmAsistencia"
+        [formRoot]="frmAsistencia"
+        class="grid grid-cols-1 gap-4 py-5">
+
+        <!-- Inscripción -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Inscripción</mat-label>
+
+            @if(isInfo || (esEntrenador && isEditing)) {
+
+                <!-- Mostrar la inscripción sin permitir cambios -->
+                <input matInput
+                    [value]="obtenerInscripcionActual()"
+                    readonly>
+
+            } @else {
+
+                <mat-select
+                    [formField]="frmAsistencia.inscripcion_id"
+                    (selectionChange)="onInscripcionChange($event.value)">
+
+                    @for(inscripcion of obtenerInscripciones();
+                        track inscripcion.id) {
+
+                        <mat-option [value]="inscripcion.id">
+
+                            #{{inscripcion.id}} -
+                            {{obtenerUsuario(inscripcion.usuario_id)}} -
+                            {{obtenerClase(inscripcion.clase_id)}}
+
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmAsistencia.inscripcion_id().touched() &&
+                frmAsistencia.inscripcion_id().invalid()) {
+
+                @for(error of frmAsistencia.inscripcion_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Estado de carga de las inscripciones -->
+        @if(!isInfo && !(esEntrenador && isEditing)) {
+
+            @if(srvInscripcion.inscripciones.isLoading() ||
+                srvClase.clases.isLoading()) {
+
+                <div class="text-sm text-slate-500">
+
+                    Cargando inscripciones...
+
+                </div>
+
+            } @else if(srvInscripcion.inscripciones.error() ||
+                srvClase.clases.error()) {
+
+                <div class="text-sm text-[#dc2626]">
+
+                    No se pudieron cargar las inscripciones.
+
+                </div>
+
+            } @else if(obtenerInscripciones().length === 0) {
+
+                <div class="bg-[#fef3c7] text-[#92400e]
+                    rounded-lg p-3 text-sm">
+
+                    No se encontraron inscripciones disponibles
+                    en los registros consultados.
+
+                </div>
+
+            }
+
+        }
+
+        <!-- Clase asignada automáticamente -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Clase</mat-label>
+
+            <input matInput
+                [value]="obtenerClase(objAsistencia().clase_id)"
+                readonly>
+
+            <mat-hint>
+                Asignada automáticamente según la inscripción.
+            </mat-hint>
+
+        </mat-form-field>
+
+        <!-- Fecha de asistencia -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Fecha de asistencia</mat-label>
+
+            <input matInput
+                type="date"
+                [formField]="frmAsistencia.fecha_asistencia">
+
+            @if(frmAsistencia.fecha_asistencia().touched() &&
+                frmAsistencia.fecha_asistencia().invalid()) {
+
+                @for(error of frmAsistencia.fecha_asistencia().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Estado -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Estado</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objAsistencia().estado"
+                    disabled>
+
+                    <mat-option value="Presente">
+                        Presente
+                    </mat-option>
+
+                    <mat-option value="Ausente">
+                        Ausente
+                    </mat-option>
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmAsistencia.estado">
+
+                    <mat-option value="Presente">
+                        Presente
+                    </mat-option>
+
+                    <mat-option value="Ausente">
+                        Ausente
+                    </mat-option>
+
+                </mat-select>
+
+            }
+
+            @if(frmAsistencia.estado().touched() &&
+                frmAsistencia.estado().invalid()) {
+
+                @for(error of frmAsistencia.estado().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo && (esAdmin || esEntrenador)) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmAsistencia"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-[#d1d5db]!
+            disabled:text-[#64748b]!"
+            [disabled]="frmAsistencia().invalid() ||
+                !asistenciaValida()">
+
+            Guardar
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

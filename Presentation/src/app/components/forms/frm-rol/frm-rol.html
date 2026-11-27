@@ -1,0 +1,71 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmRol"
+        [formRoot]="frmRol"
+        class="grid gap-4 py-5">
+
+        <mat-form-field appearance="outline" class="w-full">
+
+            <mat-label>Nombre del rol</mat-label>
+
+            <input matInput
+                type="text"
+                placeholder="Nombre del rol"
+                [formField]="frmRol.nombre">
+
+            @if(frmRol.nombre().touched() &&
+                frmRol.nombre().invalid()) {
+
+                @for(error of frmRol.nombre().errors();
+                    track error.kind) {
+
+                    <mat-error>
+                        {{error.message}}
+                    </mat-error>
+
+                }
+            }
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmRol"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-slate-300! disabled:text-slate-500!"
+            [disabled]="frmRol().invalid()">
+
+            Guardar
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

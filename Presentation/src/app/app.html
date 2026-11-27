@@ -1,0 +1,153 @@
+<section class="flex flex-col h-screen w-full bg-slate-100">
+
+    <mat-toolbar
+        class="h-16! bg-[#163a63]! text-white! flex justify-between items-center shrink-0">
+
+        <button matIconButton
+            class="text-white!"
+            (click)="sidenav.toggle()"
+            [matTooltip]="sidenav.opened ? 'Cerrar menú' : 'Abrir menú'"
+            matTooltipPosition="right"
+            [disabled]="!authService.isLoggedIn()">
+
+            <mat-icon>menu</mat-icon>
+
+        </button>
+
+        <span class="text-xl font-bold text-center">
+
+            Sistema de Gestión de Gimnasios
+
+        </span>
+
+        <div class="flex items-center mr-4">
+
+            <button mat-icon-button
+                [matMenuTriggerFor]="menu"
+                class="text-white!">
+
+                <mat-icon>person</mat-icon>
+
+            </button>
+
+        </div>
+
+        <mat-menu #menu="matMenu">
+
+            <button mat-menu-item
+                [routerLink]="['/login']"
+                [hidden]="authService.isLoggedIn()">
+
+                Iniciar sesión
+
+            </button>
+
+            <button mat-menu-item
+                (click)="loggout()"
+                [hidden]="!authService.isLoggedIn()">
+
+                Cerrar sesión
+
+            </button>
+
+        </mat-menu>
+
+    </mat-toolbar>
+
+    <mat-sidenav-container class="flex-1 w-full min-h-0">
+
+        <mat-sidenav #sidenav
+            mode="side"
+            class="w-64! bg-[#e8eef5]! border-r border-slate-200"
+            [opened]="authService.isLoggedIn()">
+
+            <mat-nav-list class="p-2!">
+
+                <!-- Información del usuario -->
+                <div class="bg-[#d5e3f3] rounded-lg mb-3 p-4">
+
+                    <div class="flex items-center gap-2 mb-2">
+
+                        <mat-icon class="text-[#163a63]!">
+
+                            account_circle
+
+                        </mat-icon>
+
+                        <span class="text-sm font-bold text-[#163a63]">
+
+                            {{nombreRol}}
+
+                        </span>
+
+                    </div>
+
+                    <span class="text-xs font-medium
+                        text-[#475569] break-all">
+
+                        {{correoActual}}
+
+                    </span>
+
+                </div>
+
+                <mat-divider></mat-divider>
+
+                <!-- Opciones según el rol -->
+                @for(item of menuItems; track item.label) {
+
+                    @if(item.rol.includes(rolActual)) {
+
+                        <a mat-list-item
+                            [routerLink]="item.route"
+                            class="my-1 rounded-lg! hover:bg-blue-200!">
+
+                            <mat-icon matListItemIcon
+                                class="text-[#163a63]!">
+
+                                {{item.icon}}
+
+                            </mat-icon>
+
+                            <span matListItemTitle
+                                class="text-[#163a63]! text-sm!">
+
+                                {{item.label}}
+
+                            </span>
+
+                        </a>
+
+                    }
+
+                }
+
+            </mat-nav-list>
+
+        </mat-sidenav>
+
+        <mat-sidenav-content class="bg-slate-100!">
+
+            <main class="w-full min-h-full">
+
+                <router-outlet />
+
+            </main>
+
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+
+    <mat-toolbar
+        class="h-12! bg-[#163a63]! text-white! flex justify-center items-center shrink-0">
+
+        <span class="text-xs font-medium text-center">
+
+            © 2026 Sistema de Gestión de Gimnasios.
+            Todos los derechos reservados.
+
+        </span>
+
+    </mat-toolbar>
+
+</section>

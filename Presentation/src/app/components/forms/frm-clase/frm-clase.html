@@ -1,0 +1,291 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmClase"
+        [formRoot]="frmClase"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 py-5">
+
+        <!-- Nombre de la clase -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Nombre de la clase</mat-label>
+
+            <input matInput
+                placeholder="Ejemplo: Spinning"
+                [formField]="frmClase.nombre">
+
+            @if(frmClase.nombre().touched() &&
+                frmClase.nombre().invalid()) {
+
+                @for(error of frmClase.nombre().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Descripción -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Descripción</mat-label>
+
+            <textarea matInput
+                rows="3"
+                placeholder="Descripción de la clase"
+                [formField]="frmClase.descripcion">
+            </textarea>
+
+            @if(frmClase.descripcion().touched() &&
+                frmClase.descripcion().invalid()) {
+
+                @for(error of frmClase.descripcion().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Entrenador -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Entrenador</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objClase().entrenador_id"
+                    disabled>
+
+                    @for(entrenador of obtenerEntrenadores();
+                        track entrenador.id) {
+
+                        <mat-option [value]="entrenador.id">
+
+                            {{entrenador.nombre}}
+                            {{entrenador.apellido}}
+
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmClase.entrenador_id">
+
+                    @for(entrenador of obtenerEntrenadores();
+                        track entrenador.id) {
+
+                        <mat-option [value]="entrenador.id">
+
+                            {{entrenador.nombre}}
+                            {{entrenador.apellido}}
+
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmClase.entrenador_id().touched() &&
+                frmClase.entrenador_id().invalid()) {
+
+                @for(error of frmClase.entrenador_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Capacidad -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Capacidad máxima</mat-label>
+
+            <input matInput
+                type="number"
+                placeholder="Ejemplo: 20"
+                [formField]="frmClase.capacidad">
+
+            @if(frmClase.capacidad().touched() &&
+                frmClase.capacidad().invalid()) {
+
+                @for(error of frmClase.capacidad().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Fecha y hora de inicio -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Fecha y hora de inicio</mat-label>
+
+            <input matInput
+                type="datetime-local"
+                [formField]="frmClase.fecha_hora_inicio">
+
+            @if(frmClase.fecha_hora_inicio().touched() &&
+                frmClase.fecha_hora_inicio().invalid()) {
+
+                @for(error of frmClase.fecha_hora_inicio().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Fecha y hora de finalización -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Fecha y hora de fin</mat-label>
+
+            <input matInput
+                type="datetime-local"
+                [formField]="frmClase.fecha_hora_fin">
+
+            @if(frmClase.fecha_hora_fin().touched() &&
+                frmClase.fecha_hora_fin().invalid()) {
+
+                @for(error of frmClase.fecha_hora_fin().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Estado -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Estado</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objClase().estado"
+                    disabled>
+
+                    <mat-option value="Programada">
+                        Programada
+                    </mat-option>
+
+                    <mat-option value="Finalizada">
+                        Finalizada
+                    </mat-option>
+
+                    <mat-option value="Cancelada">
+                        Cancelada
+                    </mat-option>
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmClase.estado">
+
+                    <mat-option value="Programada">
+                        Programada
+                    </mat-option>
+
+                    <mat-option value="Finalizada">
+                        Finalizada
+                    </mat-option>
+
+                    <mat-option value="Cancelada">
+                        Cancelada
+                    </mat-option>
+
+                </mat-select>
+
+            }
+
+            @if(frmClase.estado().touched() &&
+                frmClase.estado().invalid()) {
+
+                @for(error of frmClase.estado().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmClase"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-[#d1d5db]!
+            disabled:text-[#64748b]!"
+            [disabled]="frmClase().invalid()">
+
+            Guardar
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

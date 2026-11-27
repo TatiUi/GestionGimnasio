@@ -1,0 +1,50 @@
+<h2 mat-dialog-title
+    class="flex! items-center justify-center pt-6!">
+
+    <div class="bg-blue-100 rounded-full w-16 h-16
+        flex items-center justify-center">
+
+        <mat-icon class="text-[#163a63]! text-4xl! w-10! h-10!">
+            {{data.icono}}
+        </mat-icon>
+
+    </div>
+
+</h2>
+
+<mat-dialog-content>
+
+    <p class="text-center text-slate-700 text-base py-3">
+        {{data.texto}}
+    </p>
+
+</mat-dialog-content>
+
+<mat-dialog-actions class="flex! justify-center gap-3 pb-6!">
+
+    @if(data.textoAceptar) {
+
+        <button mat-raised-button
+            class="bg-[#163a63]! text-white! px-6!"
+            [mat-dialog-close]="true">
+
+            {{data.textoAceptar}}
+
+        </button>
+
+    }
+
+    @if(data.textoCancelar) {
+
+        <button mat-raised-button
+            class="bg-slate-200! text-slate-700! px-6!"
+            [mat-dialog-close]="false"
+            cdkFocusInitial>
+
+            {{data.textoCancelar}}
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

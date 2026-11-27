@@ -1,0 +1,288 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmMembresia"
+        [formRoot]="frmMembresia"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 py-5">
+
+        <!-- Usuario -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Usuario</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objMembresia().usuario_id"
+                    disabled>
+
+                    @if(srvUsuario.usuarios.hasValue()) {
+
+                        @for(usuario of srvUsuario.usuarios.value().data;
+                            track usuario.id) {
+
+                            <mat-option [value]="usuario.id">
+
+                                {{usuario.nombre}} {{usuario.apellido}}
+
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmMembresia.usuario_id">
+
+                    @if(srvUsuario.usuarios.hasValue()) {
+
+                        @for(usuario of srvUsuario.usuarios.value().data;
+                            track usuario.id) {
+
+                            <mat-option [value]="usuario.id">
+
+                                {{usuario.nombre}} {{usuario.apellido}}
+
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmMembresia.usuario_id().touched() &&
+                frmMembresia.usuario_id().invalid()) {
+
+                @for(error of frmMembresia.usuario_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Plan de membresía -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Plan de membresía</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objMembresia().plan_id"
+                    disabled>
+
+                    @if(srvPlan.planesMembresias.hasValue()) {
+
+                        @for(plan of srvPlan.planesMembresias.value().data;
+                            track plan.id) {
+
+                            <mat-option [value]="plan.id">
+
+                                {{plan.nombre}} - ₡{{plan.precio}}
+
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmMembresia.plan_id">
+
+                    @if(srvPlan.planesMembresias.hasValue()) {
+
+                        @for(plan of srvPlan.planesMembresias.value().data;
+                            track plan.id) {
+
+                            <mat-option [value]="plan.id">
+
+                                {{plan.nombre}} - ₡{{plan.precio}}
+
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmMembresia.plan_id().touched() &&
+                frmMembresia.plan_id().invalid()) {
+
+                @for(error of frmMembresia.plan_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Fecha de inicio -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Fecha de inicio</mat-label>
+
+            <input matInput
+                type="date"
+                [formField]="frmMembresia.fecha_inicio">
+
+            @if(frmMembresia.fecha_inicio().touched() &&
+                frmMembresia.fecha_inicio().invalid()) {
+
+                @for(error of frmMembresia.fecha_inicio().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Fecha de finalización -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Fecha de finalización</mat-label>
+
+            <input matInput
+                type="date"
+                [formField]="frmMembresia.fecha_fin">
+
+            @if(frmMembresia.fecha_fin().touched() &&
+                frmMembresia.fecha_fin().invalid()) {
+
+                @for(error of frmMembresia.fecha_fin().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Estado -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Estado</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objMembresia().estado"
+                    disabled>
+
+                    <mat-option value="Activa">
+                        Activa
+                    </mat-option>
+
+                    <mat-option value="Vencida">
+                        Vencida
+                    </mat-option>
+
+                    <mat-option value="Cancelada">
+                        Cancelada
+                    </mat-option>
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmMembresia.estado">
+
+                    <mat-option value="Activa">
+                        Activa
+                    </mat-option>
+
+                    <mat-option value="Vencida">
+                        Vencida
+                    </mat-option>
+
+                    <mat-option value="Cancelada">
+                        Cancelada
+                    </mat-option>
+
+                </mat-select>
+
+            }
+
+            @if(frmMembresia.estado().touched() &&
+                frmMembresia.estado().invalid()) {
+
+                @for(error of frmMembresia.estado().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmMembresia"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-[#d1d5db]!
+            disabled:text-[#64748b]!"
+            [disabled]="frmMembresia().invalid()">
+
+            Guardar
+
+        </button>
+
+    }
+
+</mat-dialog-actions>
