@@ -1,0 +1,422 @@
+<div class="w-full max-w-7xl mx-auto p-4 md:p-8">
+
+    <mat-card class="bg-white! rounded-xl! shadow-sm! overflow-hidden">
+
+        <!-- Encabezado -->
+        <mat-card-header class="bg-[#163a63]! text-white! p-5!">
+
+            <mat-card-title
+                class="flex items-center gap-3 text-xl! font-bold!">
+
+                <mat-icon>payments</mat-icon>
+
+                {{esAdmin ? 'Catálogo de pagos' : 'Mis pagos'}}
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content class="p-5!">
+
+            <!-- Panel de filtros -->
+            <mat-expansion-panel
+                [expanded]="panelFilterState()"
+                hideToggle
+                (opened)="panelFilterState.set(true)"
+                (closed)="onFilterClose()"
+                class="mb-5!">
+
+                <mat-expansion-panel-header>
+
+                    <mat-panel-title>
+
+                        <mat-icon class="mr-2">
+                            filter_list
+                        </mat-icon>
+
+                        Filtrar - Click para
+                        {{panelFilterState() ? 'cerrar' : 'abrir'}}
+
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+
+                <mat-form-field
+                    appearance="outline"
+                    class="w-full mt-3">
+
+                    <mat-label>Estado del pago</mat-label>
+
+                    <mat-select
+                        [formField]="frmFilter.estado"
+                        (selectionChange)="onFilterChange($event.value)">
+
+                        <mat-option value="">
+                            Todos
+                        </mat-option>
+
+                        <mat-option value="Pendiente">
+                            Pendientes
+                        </mat-option>
+
+                        <mat-option value="Completado">
+                            Completados
+                        </mat-option>
+
+                        <mat-option value="Anulado">
+                            Anulados
+                        </mat-option>
+
+                    </mat-select>
+
+                </mat-form-field>
+
+            </mat-expansion-panel>
+
+            <!-- Tabla de pagos -->
+            <div class="relative overflow-x-auto rounded-lg
+                border border-slate-200">
+
+                <table mat-table
+                    [dataSource]="dataSource()"
+                    class="w-full">
+
+                    <!-- ID -->
+                    <ng-container matColumnDef="id">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            ID
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let pago">
+
+                            {{pago.id}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Membresía -->
+                    <ng-container matColumnDef="membresia">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Membresía
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let pago">
+
+                            {{obtenerMembresia(pago.membresia_id)}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Monto -->
+                    <ng-container matColumnDef="monto">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Monto
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let pago">
+
+                            <span class="font-semibold text-[#15803d]">
+
+                                ₡{{pago.monto}}
+
+                            </span>
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Fecha de pago -->
+                    <ng-container matColumnDef="fecha_pago">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Fecha de pago
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let pago">
+
+                            {{pago.fecha_pago}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Método de pago -->
+                    <ng-container matColumnDef="metodo_pago">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Método de pago
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let pago">
+
+                            {{pago.metodo_pago}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Estado -->
+                    <ng-container matColumnDef="estado">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Estado
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let pago">
+
+                            @if(pago.estado === 'Completado') {
+
+                                <span class="bg-[#dcfce7] text-[#166534]
+                                    px-3 py-1 rounded-full text-xs
+                                    font-medium">
+
+                                    Completado
+
+                                </span>
+
+                            } @else if(pago.estado === 'Pendiente') {
+
+                                <span class="bg-[#fef3c7] text-[#92400e]
+                                    px-3 py-1 rounded-full text-xs
+                                    font-medium">
+
+                                    Pendiente
+
+                                </span>
+
+                            } @else if(pago.estado === 'Anulado') {
+
+                                <span class="bg-[#fee2e2] text-[#991b1b]
+                                    px-3 py-1 rounded-full text-xs
+                                    font-medium">
+
+                                    Anulado
+
+                                </span>
+
+                            } @else {
+
+                                Sin estado
+
+                            }
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Botonera -->
+                    <ng-container matColumnDef="botonera">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]!">
+
+                            <div class="flex justify-center">
+
+                                <!-- Solo el administrador puede crear -->
+                                @if(esAdmin) {
+
+                                    <button
+                                        type="button"
+                                        (click)="onCreate()"
+                                        class="flex items-center justify-center
+                                        gap-2 px-4 py-2 rounded-lg
+                                        bg-[#15803d]! hover:bg-[#166534]!
+                                        text-[#ffffff]! cursor-pointer">
+
+                                        <mat-icon>add</mat-icon>
+
+                                        Nuevo
+
+                                    </button>
+
+                                } @else {
+
+                                    <span class="font-bold">
+
+                                        Información
+
+                                    </span>
+
+                                }
+
+                            </div>
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let pago">
+
+                            <div class="flex items-center justify-center
+                                gap-3 whitespace-nowrap py-2">
+
+                                <!-- Información -->
+                                <button
+                                    type="button"
+                                    (click)="onInfo(pago.id)"
+                                    title="Ver información"
+                                    aria-label="Ver información"
+                                    class="flex items-center justify-center
+                                    w-10 h-10 rounded-lg cursor-pointer
+                                    bg-[#1d4ed8]! hover:bg-[#1e40af]!
+                                    text-[#ffffff]!">
+
+                                    <mat-icon>info</mat-icon>
+
+                                </button>
+
+                                <!-- Operaciones exclusivas del administrador -->
+                                @if(esAdmin) {
+
+                                    <!-- Editar -->
+                                    <button
+                                        type="button"
+                                        (click)="onEdit(pago.id)"
+                                        title="Editar pago"
+                                        aria-label="Editar pago"
+                                        class="flex items-center justify-center
+                                        w-10 h-10 rounded-lg cursor-pointer
+                                        bg-[#eab308]! hover:bg-[#ca8a04]!
+                                        text-[#1e293b]!">
+
+                                        <mat-icon>edit</mat-icon>
+
+                                    </button>
+
+                                    <!-- Eliminar -->
+                                    <button
+                                        type="button"
+                                        (click)="onDelete(pago.id)"
+                                        title="Eliminar pago"
+                                        aria-label="Eliminar pago"
+                                        class="flex items-center justify-center
+                                        w-10 h-10 rounded-lg cursor-pointer
+                                        bg-[#dc2626]! hover:bg-[#b91c1c]!
+                                        text-[#ffffff]!">
+
+                                        <mat-icon>delete</mat-icon>
+
+                                    </button>
+
+                                }
+
+                            </div>
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Filas de la tabla -->
+                    <tr mat-header-row
+                        *matHeaderRowDef="displayedColumns">
+                    </tr>
+
+                    <tr mat-row
+                        *matRowDef="let row; columns: displayedColumns;"
+                        class="hover:bg-[#f8fafc]!">
+                    </tr>
+
+                </table>
+
+                <!-- Estado de carga -->
+                @if(srvPago.pagos.isLoading() ||
+                    (esCliente && srvMembresia.membresias.isLoading())) {
+
+                    <div class="p-6 text-center text-slate-500">
+
+                        Cargando pagos...
+
+                    </div>
+
+                } @else if(srvPago.pagos.error() ||
+                    (esCliente && srvMembresia.membresias.error())) {
+
+                    <div class="p-6 text-center text-[#dc2626]">
+
+                        No se pudieron cargar los pagos.
+
+                    </div>
+
+                } @else if(dataSource().length === 0) {
+
+                    <div class="p-6 text-center text-slate-500">
+
+                        No se encontraron registros.
+
+                    </div>
+
+                }
+
+            </div>
+
+            <!-- Cantidad de registros -->
+            <div class="mt-4 text-sm text-slate-500">
+
+                Registros mostrados: {{dataSource().length}}
+
+            </div>
+
+        </mat-card-content>
+
+        <!-- Botones inferiores -->
+        <mat-card-footer
+            class="flex flex-wrap justify-end gap-3 p-5">
+
+            <button matFab extended
+                (click)="toggleFilterPanel()"
+                class="bg-[#dbeafe]! text-[#163a63]!">
+
+                <mat-icon>filter_list</mat-icon>
+
+                {{panelFilterState()
+                    ? 'Ocultar filtro'
+                    : 'Filtrar'}}
+
+            </button>
+
+            <button matFab extended
+                (click)="onPrint()"
+                class="bg-[#163a63]! text-white!
+                disabled:bg-[#d1d5db]!
+                disabled:text-[#64748b]!"
+                [disabled]="dataSource().length === 0">
+
+                <mat-icon>print</mat-icon>
+
+                Imprimir
+
+            </button>
+
+        </mat-card-footer>
+
+    </mat-card>
+
+</div>

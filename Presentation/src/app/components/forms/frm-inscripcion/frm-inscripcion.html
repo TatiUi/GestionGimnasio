@@ -1,0 +1,283 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmInscripcion"
+        [formRoot]="frmInscripcion"
+        class="grid grid-cols-1 gap-4 py-5">
+
+        <!-- Cliente -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Cliente</mat-label>
+
+            @if(esCliente) {
+
+                <!-- Mostrar el cliente autenticado -->
+                <input matInput
+                    [value]="obtenerClienteActual()"
+                    readonly>
+
+            } @else if(isInfo) {
+
+                <mat-select
+                    [value]="objInscripcion().usuario_id"
+                    disabled>
+
+                    @for(cliente of obtenerClientes();
+                        track cliente.id) {
+
+                        <mat-option [value]="cliente.id">
+
+                            {{cliente.nombre}}
+                            {{cliente.apellido}}
+
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmInscripcion.usuario_id">
+
+                    @for(cliente of obtenerClientes();
+                        track cliente.id) {
+
+                        <mat-option [value]="cliente.id">
+
+                            {{cliente.nombre}}
+                            {{cliente.apellido}}
+
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmInscripcion.usuario_id().touched() &&
+                frmInscripcion.usuario_id().invalid()) {
+
+                @for(error of frmInscripcion.usuario_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Clase -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Clase</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objInscripcion().clase_id"
+                    disabled>
+
+                    @for(clase of obtenerClases();
+                        track clase.id) {
+
+                        <mat-option [value]="clase.id">
+
+                            {{clase.nombre}} - {{clase.estado}}
+
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmInscripcion.clase_id">
+
+                    @for(clase of obtenerClases();
+                        track clase.id) {
+
+                        <mat-option [value]="clase.id">
+
+                            {{clase.nombre}} - {{clase.estado}}
+
+                        </mat-option>
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmInscripcion.clase_id().touched() &&
+                frmInscripcion.clase_id().invalid()) {
+
+                @for(error of frmInscripcion.clase_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Mensaje cuando no existen clases programadas futuras -->
+        @if(esCliente) {
+
+            @if(srvClase.clases.isLoading()) {
+
+                <div class="text-sm text-slate-500">
+
+                    Cargando clases...
+
+                </div>
+
+            } @else if(srvClase.clases.error()) {
+
+                <div class="text-sm text-[#dc2626]">
+
+                    No se pudieron cargar las clases.
+
+                </div>
+
+            } @else if(obtenerClases().length === 0) {
+
+                <div class="bg-[#fef3c7] text-[#92400e]
+                    rounded-lg p-3 text-sm">
+
+                    Actualmente no existen clases programadas futuras
+                    en los registros consultados.
+
+                </div>
+
+            }
+
+        }
+
+        <!-- Fecha de inscripción -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Fecha de inscripción</mat-label>
+
+            <input matInput
+                type="date"
+                [formField]="frmInscripcion.fecha_inscripcion">
+
+            @if(frmInscripcion.fecha_inscripcion().touched() &&
+                frmInscripcion.fecha_inscripcion().invalid()) {
+
+                @for(error of frmInscripcion.fecha_inscripcion().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Estado -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Estado</mat-label>
+
+            @if(esCliente || isInfo) {
+
+                <mat-select
+                    [value]="objInscripcion().estado"
+                    disabled>
+
+                    <mat-option value="Inscrito">
+                        Inscrito
+                    </mat-option>
+
+                    <mat-option value="Cancelado">
+                        Cancelado
+                    </mat-option>
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmInscripcion.estado">
+
+                    <mat-option value="Inscrito">
+                        Inscrito
+                    </mat-option>
+
+                    <mat-option value="Cancelado">
+                        Cancelado
+                    </mat-option>
+
+                </mat-select>
+
+            }
+
+            @if(frmInscripcion.estado().touched() &&
+                frmInscripcion.estado().invalid()) {
+
+                @for(error of frmInscripcion.estado().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo && (esAdmin || esCliente)) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmInscripcion"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-[#d1d5db]!
+            disabled:text-[#64748b]!"
+            [disabled]="frmInscripcion().invalid() ||
+                (esCliente && !claseDisponibleSeleccionada())">
+
+            {{esCliente ? 'Inscribirme' : 'Guardar'}}
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

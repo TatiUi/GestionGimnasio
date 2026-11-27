@@ -1,0 +1,92 @@
+.container {
+    position: absolute;
+    top: 64px;
+    bottom: 60px;
+    left: 0;
+    right: 0;
+}
+
+.sidenav {
+    width: 250px;
+    background-color: #e8eef5;
+    border-right: 1px solid #d1d5db;
+}
+
+section {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100vh;
+    background-color: #f4f6f9;
+}
+
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #163a63;
+    color: white;
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 60px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #163a63;
+    color: white;
+    font-size: 12px;
+}
+
+.titulo {
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.botonMenu {
+    cursor: pointer;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    color: white;
+}
+
+.botonMenu:hover {
+    background-color: rgba(255, 255, 255, 0.15);
+}
+
+.botonMenu:active {
+    background-color: rgba(255, 255, 255, 0.25);
+}
+
+.usuario {
+    font-size: 13px;
+    font-weight: bold;
+    background-color: #d5e3f3;
+}
+
+mat-nav-list a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    text-decoration: none;
+    color: #163a63;
+    font-size: 14px;
+}
+
+mat-nav-list mat-list-item:hover {
+    background-color: #d5e3f3;
+}
+
+mat-sidenav-content {
+    padding: 20px;
+}

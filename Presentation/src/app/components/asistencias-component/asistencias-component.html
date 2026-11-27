@@ -1,0 +1,408 @@
+<div class="w-full max-w-7xl mx-auto p-4 md:p-8">
+
+    <mat-card class="bg-white! rounded-xl! shadow-sm! overflow-hidden">
+
+        <!-- Encabezado -->
+        <mat-card-header class="bg-[#163a63]! text-white! p-5!">
+
+            <mat-card-title
+                class="flex items-center gap-3 text-xl! font-bold!">
+
+                <mat-icon>fact_check</mat-icon>
+
+                {{tituloCatalogo}}
+
+            </mat-card-title>
+
+        </mat-card-header>
+
+        <mat-card-content class="p-5!">
+
+            <!-- Panel de filtros -->
+            <mat-expansion-panel
+                [expanded]="panelFilterState()"
+                hideToggle
+                (opened)="panelFilterState.set(true)"
+                (closed)="onFilterClose()"
+                class="mb-5!">
+
+                <mat-expansion-panel-header>
+
+                    <mat-panel-title>
+
+                        <mat-icon class="mr-2">
+                            filter_list
+                        </mat-icon>
+
+                        Filtrar - Click para
+                        {{panelFilterState() ? 'cerrar' : 'abrir'}}
+
+                    </mat-panel-title>
+
+                </mat-expansion-panel-header>
+
+                <mat-form-field
+                    appearance="outline"
+                    class="w-full mt-3">
+
+                    <mat-label>Estado de asistencia</mat-label>
+
+                    <mat-select
+                        [formField]="frmFilter.estado"
+                        (selectionChange)="onFilterChange($event.value)">
+
+                        <mat-option value="">
+                            Todas
+                        </mat-option>
+
+                        <mat-option value="Presente">
+                            Presente
+                        </mat-option>
+
+                        <mat-option value="Ausente">
+                            Ausente
+                        </mat-option>
+
+                    </mat-select>
+
+                </mat-form-field>
+
+            </mat-expansion-panel>
+
+            <!-- Tabla de asistencias -->
+            <div class="relative overflow-x-auto rounded-lg
+                border border-slate-200">
+
+                <table mat-table
+                    [dataSource]="dataSource()"
+                    class="w-full">
+
+                    <!-- ID -->
+                    <ng-container matColumnDef="id">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            ID
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let asistencia">
+
+                            {{asistencia.id}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Inscripción -->
+                    <ng-container matColumnDef="inscripcion">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Inscripción
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let asistencia">
+
+                            #{{asistencia.inscripcion_id}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Cliente -->
+                    <ng-container matColumnDef="usuario">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Cliente
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let asistencia">
+
+                            {{obtenerCliente(asistencia.inscripcion_id)}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Clase -->
+                    <ng-container matColumnDef="clase">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Clase
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let asistencia">
+
+                            {{obtenerClase(asistencia.clase_id)}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Fecha de asistencia -->
+                    <ng-container matColumnDef="fecha_asistencia">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Fecha de asistencia
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let asistencia">
+
+                            {{asistencia.fecha_asistencia}}
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Estado -->
+                    <ng-container matColumnDef="estado">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]! font-bold!">
+
+                            Estado
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let asistencia">
+
+                            @if(asistencia.estado === 'Presente') {
+
+                                <span class="bg-[#dcfce7] text-[#166534]
+                                    px-3 py-1 rounded-full text-xs
+                                    font-medium">
+
+                                    Presente
+
+                                </span>
+
+                            } @else if(asistencia.estado === 'Ausente') {
+
+                                <span class="bg-[#fee2e2] text-[#991b1b]
+                                    px-3 py-1 rounded-full text-xs
+                                    font-medium">
+
+                                    Ausente
+
+                                </span>
+
+                            } @else {
+
+                                Sin estado
+
+                            }
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Botonera -->
+                    <ng-container matColumnDef="botonera">
+
+                        <th mat-header-cell
+                            *matHeaderCellDef
+                            class="bg-[#f1f5f9]!">
+
+                            <div class="flex justify-center">
+
+                                <!-- Administrador y entrenador -->
+                                @if(esAdmin || esEntrenador) {
+
+                                    <button
+                                        type="button"
+                                        (click)="onCreate()"
+                                        class="flex items-center justify-center
+                                        gap-2 px-4 py-2 rounded-lg
+                                        bg-[#15803d]! hover:bg-[#166534]!
+                                        text-[#ffffff]! cursor-pointer">
+
+                                        <mat-icon>add</mat-icon>
+
+                                        Nuevo
+
+                                    </button>
+
+                                }
+
+                            </div>
+
+                        </th>
+
+                        <td mat-cell *matCellDef="let asistencia">
+
+                            <div class="flex items-center justify-center
+                                gap-3 whitespace-nowrap py-2">
+
+                                @if(puedeGestionarClase(asistencia.clase_id)) {
+
+                                    <!-- Información -->
+                                    <button
+                                        type="button"
+                                        (click)="onInfo(asistencia.id)"
+                                        title="Ver información"
+                                        aria-label="Ver información"
+                                        class="flex items-center justify-center
+                                        w-10 h-10 rounded-lg cursor-pointer
+                                        bg-[#1d4ed8]! hover:bg-[#1e40af]!
+                                        text-[#ffffff]!">
+
+                                        <mat-icon>info</mat-icon>
+
+                                    </button>
+
+                                    <!-- Editar -->
+                                    <button
+                                        type="button"
+                                        (click)="onEdit(asistencia.id)"
+                                        title="Editar asistencia"
+                                        aria-label="Editar asistencia"
+                                        class="flex items-center justify-center
+                                        w-10 h-10 rounded-lg cursor-pointer
+                                        bg-[#eab308]! hover:bg-[#ca8a04]!
+                                        text-[#1e293b]!">
+
+                                        <mat-icon>edit</mat-icon>
+
+                                    </button>
+
+                                }
+
+                                <!-- Solo el administrador puede eliminar -->
+                                @if(esAdmin) {
+
+                                    <button
+                                        type="button"
+                                        (click)="onDelete(asistencia.id)"
+                                        title="Eliminar asistencia"
+                                        aria-label="Eliminar asistencia"
+                                        class="flex items-center justify-center
+                                        w-10 h-10 rounded-lg cursor-pointer
+                                        bg-[#dc2626]! hover:bg-[#b91c1c]!
+                                        text-[#ffffff]!">
+
+                                        <mat-icon>delete</mat-icon>
+
+                                    </button>
+
+                                }
+
+                            </div>
+
+                        </td>
+
+                    </ng-container>
+
+                    <!-- Filas de la tabla -->
+                    <tr mat-header-row
+                        *matHeaderRowDef="displayedColumns">
+                    </tr>
+
+                    <tr mat-row
+                        *matRowDef="let row; columns: displayedColumns;"
+                        class="hover:bg-[#f8fafc]!">
+                    </tr>
+
+                </table>
+
+                <!-- Estado de carga -->
+                @if(srvAsistencia.asistencias.isLoading() ||
+                    (esEntrenador && srvClase.clases.isLoading())) {
+
+                    <div class="p-6 text-center text-slate-500">
+
+                        Cargando asistencias...
+
+                    </div>
+
+                } @else if(srvAsistencia.asistencias.error() ||
+                    (esEntrenador && srvClase.clases.error())) {
+
+                    <div class="p-6 text-center text-[#dc2626]">
+
+                        No se pudieron cargar las asistencias.
+
+                    </div>
+
+                } @else if(dataSource().length === 0) {
+
+                    <div class="p-6 text-center text-slate-500">
+
+                        @if(esEntrenador) {
+
+                            No se encontraron asistencias
+                            para sus clases asignadas.
+
+                        } @else {
+
+                            No se encontraron registros.
+
+                        }
+
+                    </div>
+
+                }
+
+            </div>
+
+            <!-- Cantidad de registros -->
+            <div class="mt-4 text-sm text-slate-500">
+
+                Registros mostrados: {{dataSource().length}}
+
+            </div>
+
+        </mat-card-content>
+
+        <!-- Botones inferiores -->
+        <mat-card-footer
+            class="flex flex-wrap justify-end gap-3 p-5">
+
+            <button matFab extended
+                (click)="toggleFilterPanel()"
+                class="bg-[#dbeafe]! text-[#163a63]!">
+
+                <mat-icon>filter_list</mat-icon>
+
+                {{panelFilterState()
+                    ? 'Ocultar filtro'
+                    : 'Filtrar'}}
+
+            </button>
+
+            <button matFab extended
+                (click)="onPrint()"
+                class="bg-[#163a63]! text-white!
+                disabled:bg-[#d1d5db]!
+                disabled:text-[#64748b]!"
+                [disabled]="dataSource().length === 0">
+
+                <mat-icon>print</mat-icon>
+
+                Imprimir
+
+            </button>
+
+        </mat-card-footer>
+
+    </mat-card>
+
+</div>

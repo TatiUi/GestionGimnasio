@@ -1,0 +1,295 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmPago"
+        [formRoot]="frmPago"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 py-5">
+
+        <!-- Membresía -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Membresía</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objPago().membresia_id"
+                    disabled>
+
+                    @if(srvMembresia.membresias.hasValue()) {
+
+                        @for(membresia of srvMembresia.membresias.value().data;
+                            track membresia.id) {
+
+                            <mat-option [value]="membresia.id">
+
+                                #{{membresia.id}} -
+                                {{obtenerUsuario(membresia.usuario_id)}} -
+                                {{obtenerPlan(membresia.plan_id)}}
+
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmPago.membresia_id">
+
+                    @if(srvMembresia.membresias.hasValue()) {
+
+                        @for(membresia of srvMembresia.membresias.value().data;
+                            track membresia.id) {
+
+                            <mat-option [value]="membresia.id">
+
+                                #{{membresia.id}} -
+                                {{obtenerUsuario(membresia.usuario_id)}} -
+                                {{obtenerPlan(membresia.plan_id)}}
+
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmPago.membresia_id().touched() &&
+                frmPago.membresia_id().invalid()) {
+
+                @for(error of frmPago.membresia_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Monto -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Monto (₡)</mat-label>
+
+            <input matInput
+                type="number"
+                placeholder="Ejemplo: 18000"
+                [formField]="frmPago.monto">
+
+            @if(frmPago.monto().touched() &&
+                frmPago.monto().invalid()) {
+
+                @for(error of frmPago.monto().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Fecha de pago -->
+        <mat-form-field appearance="outline"
+            class="w-full">
+
+            <mat-label>Fecha de pago</mat-label>
+
+            <input matInput
+                type="date"
+                [formField]="frmPago.fecha_pago">
+
+            @if(frmPago.fecha_pago().touched() &&
+                frmPago.fecha_pago().invalid()) {
+
+                @for(error of frmPago.fecha_pago().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Método de pago -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Método de pago</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objPago().metodo_pago"
+                    disabled>
+
+                    <mat-option value="Efectivo">
+                        Efectivo
+                    </mat-option>
+
+                    <mat-option value="Tarjeta">
+                        Tarjeta
+                    </mat-option>
+
+                    <mat-option value="Transferencia">
+                        Transferencia
+                    </mat-option>
+
+                    <mat-option value="SINPE Móvil">
+                        SINPE Móvil
+                    </mat-option>
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmPago.metodo_pago">
+
+                    <mat-option value="Efectivo">
+                        Efectivo
+                    </mat-option>
+
+                    <mat-option value="Tarjeta">
+                        Tarjeta
+                    </mat-option>
+
+                    <mat-option value="Transferencia">
+                        Transferencia
+                    </mat-option>
+
+                    <mat-option value="SINPE Móvil">
+                        SINPE Móvil
+                    </mat-option>
+
+                </mat-select>
+
+            }
+
+            @if(frmPago.metodo_pago().touched() &&
+                frmPago.metodo_pago().invalid()) {
+
+                @for(error of frmPago.metodo_pago().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Estado -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Estado</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objPago().estado"
+                    disabled>
+
+                    <mat-option value="Pendiente">
+                        Pendiente
+                    </mat-option>
+
+                    <mat-option value="Completado">
+                        Completado
+                    </mat-option>
+
+                    <mat-option value="Anulado">
+                        Anulado
+                    </mat-option>
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmPago.estado">
+
+                    <mat-option value="Pendiente">
+                        Pendiente
+                    </mat-option>
+
+                    <mat-option value="Completado">
+                        Completado
+                    </mat-option>
+
+                    <mat-option value="Anulado">
+                        Anulado
+                    </mat-option>
+
+                </mat-select>
+
+            }
+
+            @if(frmPago.estado().touched() &&
+                frmPago.estado().invalid()) {
+
+                @for(error of frmPago.estado().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmPago"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-[#d1d5db]!
+            disabled:text-[#64748b]!"
+            [disabled]="frmPago().invalid()">
+
+            Guardar
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

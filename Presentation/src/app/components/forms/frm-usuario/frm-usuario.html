@@ -1,0 +1,268 @@
+<h2 mat-dialog-title
+    class="py-5! text-center font-bold! text-[#163a63]!">
+
+    {{titulo}}
+
+</h2>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-content>
+
+    <form id="frmUsuario"
+        [formRoot]="frmUsuario"
+        class="grid grid-cols-1 md:grid-cols-2 gap-4 py-5">
+
+        <!-- Rol -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Rol</mat-label>
+
+            @if(isInfo) {
+
+                <mat-select
+                    [value]="objUsuario().rol_id"
+                    disabled>
+
+                    @if(srvRol.roles.hasValue()) {
+
+                        @for(rol of srvRol.roles.value().data;
+                            track rol.id) {
+
+                            <mat-option [value]="rol.id">
+                                {{rol.nombre}}
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            } @else {
+
+                <mat-select [formField]="frmUsuario.rol_id">
+
+                    @if(srvRol.roles.hasValue()) {
+
+                        @for(rol of srvRol.roles.value().data;
+                            track rol.id) {
+
+                            <mat-option [value]="rol.id">
+                                {{rol.nombre}}
+                            </mat-option>
+
+                        }
+
+                    }
+
+                </mat-select>
+
+            }
+
+            @if(frmUsuario.rol_id().touched() &&
+                frmUsuario.rol_id().invalid()) {
+
+                @for(error of frmUsuario.rol_id().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Nombre -->
+        <mat-form-field appearance="outline" class="w-full">
+
+            <mat-label>Nombre</mat-label>
+
+            <input matInput
+                type="text"
+                placeholder="Nombre"
+                [formField]="frmUsuario.nombre">
+
+            @if(frmUsuario.nombre().touched() &&
+                frmUsuario.nombre().invalid()) {
+
+                @for(error of frmUsuario.nombre().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Apellido -->
+        <mat-form-field appearance="outline" class="w-full">
+
+            <mat-label>Apellido</mat-label>
+
+            <input matInput
+                type="text"
+                placeholder="Apellido"
+                [formField]="frmUsuario.apellido">
+
+            @if(frmUsuario.apellido().touched() &&
+                frmUsuario.apellido().invalid()) {
+
+                @for(error of frmUsuario.apellido().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Cédula -->
+        <mat-form-field appearance="outline" class="w-full">
+
+            <mat-label>Cédula</mat-label>
+
+            <input matInput
+                type="text"
+                placeholder="Número de identificación"
+                [formField]="frmUsuario.cedula">
+
+            @if(frmUsuario.cedula().touched() &&
+                frmUsuario.cedula().invalid()) {
+
+                @for(error of frmUsuario.cedula().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Teléfono -->
+        <mat-form-field appearance="outline" class="w-full">
+
+            <mat-label>Teléfono</mat-label>
+
+            <input matInput
+                type="tel"
+                placeholder="Número telefónico"
+                [formField]="frmUsuario.telefono">
+
+            @if(frmUsuario.telefono().touched() &&
+                frmUsuario.telefono().invalid()) {
+
+                @for(error of frmUsuario.telefono().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Correo electrónico -->
+        <mat-form-field appearance="outline"
+            class="w-full md:col-span-2">
+
+            <mat-label>Correo electrónico</mat-label>
+
+            <input matInput
+                type="email"
+                placeholder="usuario@correo.com"
+                [formField]="frmUsuario.correo_electronico">
+
+            @if(frmUsuario.correo_electronico().touched() &&
+                frmUsuario.correo_electronico().invalid()) {
+
+                @for(error of frmUsuario.correo_electronico().errors();
+                    track error.kind) {
+
+                    <mat-error>{{error.message}}</mat-error>
+
+                }
+
+            }
+
+        </mat-form-field>
+
+        <!-- Contraseña -->
+        @if(!isInfo) {
+
+            <mat-form-field appearance="outline"
+                class="w-full md:col-span-2">
+
+                <mat-label>Contraseña</mat-label>
+
+                <input matInput
+                    type="password"
+                    placeholder="Contraseña"
+                    [formField]="frmUsuario.password">
+
+                @if(isEditing) {
+
+                    <mat-hint>
+                        Dejar vacío para conservar la contraseña actual.
+                    </mat-hint>
+
+                }
+
+                @if(frmUsuario.password().touched() &&
+                    frmUsuario.password().invalid()) {
+
+                    @for(error of frmUsuario.password().errors();
+                        track error.kind) {
+
+                        <mat-error>{{error.message}}</mat-error>
+
+                    }
+
+                }
+
+            </mat-form-field>
+
+        }
+
+    </form>
+
+</mat-dialog-content>
+
+<mat-divider></mat-divider>
+
+<mat-dialog-actions class="flex! justify-end gap-2 p-4!">
+
+    <button mat-button
+        type="button"
+        [mat-dialog-close]="false">
+
+        {{isInfo ? 'Cerrar' : 'Cancelar'}}
+
+    </button>
+
+    @if(!isInfo) {
+
+        <button mat-flat-button
+            type="submit"
+            form="frmUsuario"
+            class="bg-[#163a63]! text-white!
+            disabled:bg-[#d1d5db]!
+            disabled:text-[#64748b]!"
+            [disabled]="frmUsuario().invalid()">
+
+            Guardar
+
+        </button>
+
+    }
+
+</mat-dialog-actions>

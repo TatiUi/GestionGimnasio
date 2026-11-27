@@ -1,8 +1,18 @@
-.env
-/db_password.txt
-/node_modules/
-/dist/
-*.log
+mysql/
+Business/vendor/
+# Dependencias
+node_modules/
+vendor/
+
+# Archivos generados
+.angular/
+dist/
+
+# Datos locales de MySQL
 /mysql/
-/Business/vendor/
-/Data/vendor/
+
+# Credenciales
+.env
+.env.*
+!.env.example
+db_password.txt
